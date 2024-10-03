@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 7430938817066936039}
   - component: {fileID: 4364798333121045935}
   - component: {fileID: 5267360877883302805}
+  - component: {fileID: 3862797968810522262}
+  - component: {fileID: 4573418884527510456}
   m_Layer: 0
   m_Name: Melee_Enemy
   m_TagString: Enemy
@@ -122,6 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   speed: 0.5
+  Atk: 2
 --- !u!70 &5267360877883302805
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -157,3 +160,34 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.26999998, y: 0.35999998}
   m_Direction: 0
+--- !u!114 &3862797968810522262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8066888627426305317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494ecb7ceb7d394a83a70535d382f2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp: 20
+  spawner: {fileID: 0}
+--- !u!114 &4573418884527510456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8066888627426305317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359854faa88c6d645b8de6b7dea74e49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  experienceOrbPrefab: {fileID: 7870610468127686746, guid: 6063cfb50893fd54dafea61fb2131f6f, type: 3}
+  minExperienceOrbs: 1
+  maxExperienceOrbs: 2
+  spawnRadiusMin: 0.01
+  spawnRadiusMax: 1

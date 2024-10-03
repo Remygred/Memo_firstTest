@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 4900959217503196958}
   - component: {fileID: 5294795316917075178}
   - component: {fileID: 9135538926957101089}
+  - component: {fileID: -8713341685275518264}
+  - component: {fileID: 4434382365650608777}
   m_Layer: 0
   m_Name: Boomer
   m_TagString: Enemy
@@ -187,4 +189,36 @@ MonoBehaviour:
   speed: 0.5
   explosionRadius: 3
   detonationDistance: 0.5
-  explosionDamage: 20
+  Atk: 50
+  Hp: 0
+--- !u!114 &-8713341685275518264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8310772701838353811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9494ecb7ceb7d394a83a70535d382f2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp: 10
+  spawner: {fileID: 0}
+--- !u!114 &4434382365650608777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8310772701838353811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359854faa88c6d645b8de6b7dea74e49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  experienceOrbPrefab: {fileID: 7870610468127686746, guid: 6063cfb50893fd54dafea61fb2131f6f, type: 3}
+  minExperienceOrbs: 1
+  maxExperienceOrbs: 2
+  spawnRadiusMin: 0.01
+  spawnRadiusMax: 1

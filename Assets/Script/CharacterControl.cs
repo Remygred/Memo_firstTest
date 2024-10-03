@@ -10,7 +10,6 @@ public class CharacterControl : MonoBehaviour
     Animator ani;
 
     public Gun gunScript;  // 关联枪的脚本
-    public float spreadAngle = 30f;  // 技能发射的角度范围
 
     public void Start()
     {
@@ -45,23 +44,34 @@ public class CharacterControl : MonoBehaviour
 
     void UseSkill()
     {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = 0f;
+        // 子弹的预制体
+        GameObject bulletPrefab = gunScript.bulletPrefab;  // 假设你已经在枪的脚本中有引用
 
-        // 计算从枪口到鼠标的方向
-        Vector3 direction = (mousePosition - gunScript.transform.position).normalized;
-
-        // 发射所有剩余子弹，并在一定的角度范围内
-        float angleStep = spreadAngle / gunScript.currentAmmo;
-        float startAngle = -spreadAngle / 2;
+        // 计算每颗子弹之间的角度
+        float angleStep = 360f / gunScript.currentAmmo;  // 每颗子弹之间的角度均匀分布
+        float startAngle = 0f;  // 从0度开始发射
 
         for (int i = 0; i < gunScript.currentAmmo; i++)
         {
+            // 计算旋转的角度
             float angle = startAngle + (angleStep * i);
-            Vector3 rotatedDirection = Quaternion.Euler(0, 0, angle) * direction;
 
-            // 调用枪的脚本发射子弹
-            gunScript.Shoot(rotatedDirection);
+            // 旋转角度来计算发射方向
+            Vector3 direction = Quaternion.Euler(0, 0, angle) * Vector3.right;
+
+            // 在角色位置实例化子弹
+            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+
+            // 计算子弹的旋转角度，使其-x方向对准发射方向
+            float bulletAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            bullet.transform.rotation = Quaternion.Euler(0, 0, bulletAngle + 180);  // +180度使-x方向对准发射方向
+
+            // 获取子弹的 Rigidbody2D 来控制子弹运动
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+
+            // 设定子弹的速度
+            float bulletSpeed = gunScript.bulletSpeed;  // 使用枪的子弹速度
+            rb.velocity = direction * bulletSpeed;
         }
 
         gunScript.currentAmmo = 0;
@@ -69,4 +79,5 @@ public class CharacterControl : MonoBehaviour
         // 将子弹数清空，进入换弹状态
         gunScript.StartCoroutine(gunScript.Reload());
     }
+
 }

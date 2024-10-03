@@ -186,3 +186,4 @@ MonoBehaviour:
   player: {fileID: 0}
   eyeOpenDistance: 2.5
   contactDamage: 10
+  Atk: 10

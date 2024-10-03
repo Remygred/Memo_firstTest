@@ -10,15 +10,18 @@ public class TreeEnemy : MonoBehaviour
     private bool isEyeOpen = false;  // 树是否睁眼
     private Animator animator;  // 动画控制器
 
+    public int Atk;
+    private CharacterAtribute Character;
     void Start()
     {
         // 如果没有手动设置玩家对象，自动查找
-        if (player == null)
+        if (player == null || Character == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("player");
             if (playerObj != null)
             {
                 player = playerObj.transform;
+                Character = playerObj.GetComponent<CharacterAtribute>();
             }
         }
 
@@ -46,9 +49,10 @@ public class TreeEnemy : MonoBehaviour
     // 当玩家碰到树时触发
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("player"))
+        if (collision.gameObject.CompareTag("player") && !Character.IsGetAttack)
         {
             animator.SetBool("Attack",true);
+            Character.TakeDamage(Atk);
         }
     }
 

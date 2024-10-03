@@ -5,28 +5,36 @@ using UnityEngine;
 public class Boomer : MonoBehaviour
 {
     public Transform player;  // 玩家对象的Transform
-    public float speed = 2f;  // 敌人移动速度
-    public float explosionRadius = 3f;  // 爆炸的伤害范围
-    public float detonationDistance = 1f;  // 靠近玩家的自爆触发距离
-    public int explosionDamage = 20;  // 爆炸造成的伤害
+    public float speed;  // 敌人移动速度
+    public float explosionRadius;  // 爆炸的伤害范围
+    public float detonationDistance;  // 靠近玩家的自爆触发距离
+    public int Atk;  // 爆炸造成的伤害
+    public int Hp;
 
     private bool isExploding = false;  // 是否正在爆炸
     private Animator animator;  // 动画控制器
 
+    private CharacterAtribute Character;
+    private EnemyHealth enemyHealth;  // 引用敌人的健康管理组件
+
     void Start()
     {
         // 自动查找场景中的玩家
-        if (player == null)
+        if (player == null || Character == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("player");
             if (playerObj != null)
             {
                 player = playerObj.transform;
+                Character = playerObj.GetComponent<CharacterAtribute>();
             }
         }
 
         // 获取敌人的动画组件
         animator = GetComponent<Animator>();
+
+        // 获取敌人的健康管理组件
+        enemyHealth = GetComponent<EnemyHealth>();
     }
 
     void Update()
@@ -65,6 +73,22 @@ public class Boomer : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+
+       if (collision.gameObject.CompareTag("Bullet"))
+       {
+            // 如果碰到子弹，敌人受伤
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(Character.Atk,false);  // 调用敌人受伤函数并减少生命值
+            }
+
+            // 销毁子弹
+            Destroy(collision.gameObject);
+       }
+    }
+
     // 爆炸协程
     IEnumerator Detonate()
     {
@@ -79,13 +103,19 @@ public class Boomer : MonoBehaviour
         foreach (Collider2D obj in objectsInRange)
         {
             // 对玩家造成伤害
-            if (obj.CompareTag("player"))
-            {
+            if (obj.CompareTag("player") && !Character.IsGetAttack)
+            { 
+                Character.TakeDamage(Atk);
             }
 
             // 对其他敌人造成伤害
             if (obj.CompareTag("Enemy"))
             {
+                EnemyHealth enemyHealth = obj.GetComponent<EnemyHealth>();
+                if (enemyHealth != null)
+                {
+                    enemyHealth.TakeDamage(Atk,true);  // 让敌人受到伤害
+                }
             }
         }
 

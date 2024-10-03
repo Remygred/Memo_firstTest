@@ -157,7 +157,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 820576051923577176, guid: 13b9680be25042b47ae13a4a047a6460, type: 3}
   bulletSpeed: 3
   bulletOffset: 0.02
-  magazineSize: 6
+  magazineSize: 100
   currentAmmo: 0
   reloadTime: 1
 --- !u!212 &171395390
@@ -374,7 +374,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 746744177}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45bf8fb7ec8b25448a84e91e7eb14228, type: 3}
   m_Name: 
@@ -393,10 +393,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.7862599, y: 1.7012, z: 1.7012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1116505013}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1116505010
 GameObject:
@@ -412,6 +412,7 @@ GameObject:
   - component: {fileID: 1116505014}
   - component: {fileID: 1116505015}
   - component: {fileID: 1116505016}
+  - component: {fileID: 1116505017}
   m_Layer: 0
   m_Name: AiBi
   m_TagString: player
@@ -502,9 +503,13 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.7862599, y: 1.7012, z: 1.7012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1535779238}
+  - {fileID: 1141583637}
+  - {fileID: 1712418907}
+  - {fileID: 746744179}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1116505014
@@ -519,7 +524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c670ea30a638c49b02abc8b8b9d244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 5
   gunScript: {fileID: 171395389}
   spreadAngle: 30
 --- !u!70 &1116505015
@@ -584,6 +589,25 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1116505017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116505010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb38c7d33cdb0a458c68352295c45db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp: 10000
+  Exp: 0
+  Atk: 2
+  oHp: 1000
+  oAtk: 2
+  InvincibleTime: 0.5
+  IsGetAttack: 0
 --- !u!1 &1141583636
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,10 +635,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.7862599, y: 1.7012, z: 1.7012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1116505013}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1141583638
 MonoBehaviour:
@@ -623,7 +647,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141583636}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b0407567a250124babf86258956d631, type: 3}
   m_Name: 
@@ -634,6 +658,9 @@ MonoBehaviour:
   initialSpawnInterval: 5
   minSpawnInterval: 0.5
   spawnAcceleration: 0.2
+  initialEnemyCountMin: 1
+  initialEnemyCountMax: 3
+  maxEnemyCountIncreaseRate: 1
 --- !u!1 &1535779236
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,7 +685,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1535779236}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b0407567a250124babf86258956d631, type: 3}
   m_Name: 
@@ -669,6 +696,9 @@ MonoBehaviour:
   initialSpawnInterval: 5
   minSpawnInterval: 0.5
   spawnAcceleration: 0.2
+  initialEnemyCountMin: 1
+  initialEnemyCountMax: 3
+  maxEnemyCountIncreaseRate: 1
 --- !u!4 &1535779238
 Transform:
   m_ObjectHideFlags: 0
@@ -679,10 +709,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.7862599, y: 1.7012, z: 1.7012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1116505013}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1712418905
 GameObject:
@@ -708,17 +738,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1712418905}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b0407567a250124babf86258956d631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 8310772701838353811, guid: 17aa16ecfc2154e4b8bc8696e0cdea82, type: 3}
-  spawnRadiusMin: 1
-  spawnRadiusMax: 3
+  spawnRadiusMin: 3
+  spawnRadiusMax: 6
   initialSpawnInterval: 5
   minSpawnInterval: 0.5
   spawnAcceleration: 0.2
+  initialEnemyCountMin: 1
+  initialEnemyCountMax: 3
+  maxEnemyCountIncreaseRate: 1
 --- !u!4 &1712418907
 Transform:
   m_ObjectHideFlags: 0
@@ -729,10 +762,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.7862599, y: 1.7012, z: 1.7012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1116505013}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -741,7 +774,3 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1116505013}
   - {fileID: 171395391}
-  - {fileID: 1141583637}
-  - {fileID: 1535779238}
-  - {fileID: 1712418907}
-  - {fileID: 746744179}
