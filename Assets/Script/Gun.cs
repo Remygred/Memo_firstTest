@@ -18,14 +18,26 @@ public class Gun : MonoBehaviour
     public float reloadTime ;  // 换弹CD时间
     private bool isReloading = false;  // 是否正在换弹
 
+    public AudioSource ReloadaudioSource;
+    public AudioClip ReloadSound;
+
+    public AudioSource ShotaudioSource;
+    public AudioClip ShotSound;
+
     void Start()
     {
         offset = player.transform.position - transform.position;
         currentAmmo = magazineSize;
+        ShotaudioSource.volume = 0.4f;
     }
 
     void Update()
     {
+        if (Time.timeScale == 0f)
+        {
+            return; 
+        }
+
         ShotDirect();
 
         // 如果正在换弹，则不能射击
@@ -35,12 +47,10 @@ public class Gun : MonoBehaviour
         if (Move_x > 0)
         {
             transform.position = player.transform.position + offset;
-            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
         else
         {
             transform.position = player.transform.position - offset;
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
 
         // 当按下鼠标左键并且还有子弹时，发射子弹
@@ -74,6 +84,13 @@ public class Gun : MonoBehaviour
 
     public void Shoot(Vector3 mousePosition)
     {
+
+        if (ShotaudioSource != null && ShotSound != null)
+        {
+            ShotaudioSource.PlayOneShot(ShotSound);
+            ShotaudioSource.PlayOneShot(ShotSound);
+        }
+
         Vector3 direction = (mousePosition - transform.position).normalized;
 
         Vector3 offset = Vector3.Cross(direction, Vector3.forward) * bulletOffset;
@@ -97,7 +114,14 @@ public class Gun : MonoBehaviour
     {
         isReloading = true;  // 进入换弹状态
 
-        yield return new WaitForSeconds(reloadTime);  // 等待换弹CD
+        yield return new WaitForSeconds(reloadTime / 2);
+
+        if (ReloadaudioSource != null && ReloadSound != null)
+        {
+            ReloadaudioSource.PlayOneShot(ReloadSound);
+        }
+
+        yield return new WaitForSeconds(reloadTime / 2);  // 等待换弹CD
 
         currentAmmo = magazineSize;  // 重新装满弹夹
         isReloading = false;  // 结束换弹状态

@@ -19,6 +19,8 @@ public class EnemySpawner : MonoBehaviour
     private int currentEnemyCountMin;  // 当前每次生成的敌人最小数量
     private int currentEnemyCountMax;  // 当前每次生成的敌人最大数量
 
+    public int EnemyCountLimit; //单次最大敌人生成量
+
     void Start()
     {
         // 初始化当前生成间隔为初始生成间隔
@@ -47,7 +49,8 @@ public class EnemySpawner : MonoBehaviour
             currentSpawnInterval = Mathf.Max(minSpawnInterval, currentSpawnInterval - spawnAcceleration);
 
             // 随时间增加，敌人生成数量上限也逐渐增加
-            currentEnemyCountMax += maxEnemyCountIncreaseRate;
+            if(currentEnemyCountMax <= EnemyCountLimit)
+                currentEnemyCountMax += maxEnemyCountIncreaseRate;
         }
     }
 

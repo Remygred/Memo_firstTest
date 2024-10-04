@@ -12,6 +12,9 @@ public class TreeEnemy : MonoBehaviour
 
     public int Atk;
     private CharacterAtribute Character;
+
+    public AudioSource AtkaudioSource;
+    public AudioClip AtkSound;
     void Start()
     {
         // 如果没有手动设置玩家对象，自动查找
@@ -51,7 +54,24 @@ public class TreeEnemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("player") && !Character.IsGetAttack)
         {
+            if (AtkaudioSource != null && AtkSound != null)
+            {
+                AtkaudioSource.PlayOneShot(AtkSound);
+            }
             animator.SetBool("Attack",true);
+            Character.TakeDamage(Atk);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("player") && !Character.IsGetAttack)
+        {
+            if (AtkaudioSource != null && AtkSound != null)
+            {
+                AtkaudioSource.PlayOneShot(AtkSound);
+            }
+            animator.SetBool("Attack", true);
             Character.TakeDamage(Atk);
         }
     }

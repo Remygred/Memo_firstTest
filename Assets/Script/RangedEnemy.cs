@@ -19,6 +19,9 @@ public class RangedEnemy : MonoBehaviour
     private CharacterAtribute Character;//
     private EnemyHealth enemyHealth;
 
+    public AudioSource AtkaudioSource;
+    public AudioClip AtkSound;
+
     void Start()
     {
         // 如果没有手动设置玩家对象，自动查找
@@ -119,6 +122,10 @@ public class RangedEnemy : MonoBehaviour
     // 发射子弹
     void FireBullet()
     {
+        if (AtkaudioSource != null && AtkSound != null)
+        {
+            AtkaudioSource.PlayOneShot(AtkSound);
+        }
         // 计算子弹方向
         Vector3 direction = (player.position - transform.position).normalized;
 

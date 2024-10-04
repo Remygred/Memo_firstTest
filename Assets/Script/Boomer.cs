@@ -17,6 +17,9 @@ public class Boomer : MonoBehaviour
     private CharacterAtribute Character;
     private EnemyHealth enemyHealth;  // 引用敌人的健康管理组件
 
+    public AudioSource AtkaudioSource;
+    public AudioClip AtkSound;
+
     void Start()
     {
         // 自动查找场景中的玩家
@@ -95,7 +98,11 @@ public class Boomer : MonoBehaviour
         isExploding = true;  // 标记为正在爆炸
         animator.SetTrigger("Boom");  // 播放爆炸动画
 
-        // 等待动画播放（假设动画播放时间为 1 秒，可以根据动画调整时间）
+        if (AtkaudioSource != null && AtkSound != null)
+        {
+            AtkaudioSource.PlayOneShot(AtkSound);
+        }
+
         yield return new WaitForSeconds(1f);
 
         // 检测爆炸范围内的所有对象

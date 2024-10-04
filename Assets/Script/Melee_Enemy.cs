@@ -15,6 +15,9 @@ public class Melee_Enemy : MonoBehaviour
 
     private EnemyHealth enemyHealth;  // 引用敌人的健康管理组件
 
+    public AudioSource AtkaudioSource;
+    public AudioClip AtkSound;
+
     void Start()
     {
         if (player == null || Character == null)
@@ -32,11 +35,6 @@ public class Melee_Enemy : MonoBehaviour
 
         // 获取敌人的健康管理组件
         enemyHealth = GetComponent<EnemyHealth>();
-
-        if (enemyHealth == null)
-        {
-            Debug.LogError("未找到 EnemyHealth 组件，请确保敌人附加了该组件");
-        }
     }
 
     void Update()
@@ -77,6 +75,10 @@ public class Melee_Enemy : MonoBehaviour
         if (collision.gameObject.CompareTag("player") && !Character.IsGetAttack)
         {
             // 当检测到玩家时停止移动并开始攻击
+            if (AtkaudioSource != null && AtkSound != null)
+            {
+                AtkaudioSource.PlayOneShot(AtkSound);
+            }
             isAttacking = true;
             animator.SetBool("Attack", true);
             Character.TakeDamage(Atk);
@@ -91,6 +93,20 @@ public class Melee_Enemy : MonoBehaviour
 
             // 销毁子弹
             Destroy(collision.gameObject);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("player") && !Character.IsGetAttack)
+        {
+            if (AtkaudioSource != null && AtkSound != null)
+            {
+                AtkaudioSource.PlayOneShot(AtkSound);
+            }
+            isAttacking = true;
+            animator.SetBool("Attack", true);
+            Character.TakeDamage(Atk);
         }
     }
 

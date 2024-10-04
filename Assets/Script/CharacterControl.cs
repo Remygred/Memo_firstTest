@@ -11,6 +11,9 @@ public class CharacterControl : MonoBehaviour
 
     public Gun gunScript;  // 关联枪的脚本
 
+    public AudioSource SkillaudioSource;
+    public AudioClip SkillSound;
+
     public void Start()
     {
         ani = GetComponent<Animator>();     
@@ -18,6 +21,12 @@ public class CharacterControl : MonoBehaviour
 
     public void Update()
     {
+
+        if (Time.timeScale == 0f)
+        {
+            return;
+        }
+
         MoveAnimation();
         Move();
         // 监听鼠标右键的技能触发
@@ -44,6 +53,10 @@ public class CharacterControl : MonoBehaviour
 
     void UseSkill()
     {
+        if (SkillaudioSource != null && SkillSound != null)
+        {
+            SkillaudioSource.PlayOneShot(SkillSound);
+        }
         // 子弹的预制体
         GameObject bulletPrefab = gunScript.bulletPrefab;  // 假设你已经在枪的脚本中有引用
 
