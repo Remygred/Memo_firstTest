@@ -11,7 +11,6 @@ public class EnemyBullet : MonoBehaviour
 
     void Start()
     {
-        // 查找对象池，假设你已经有带有"BulletPool"标签的对象池
         GameObject poolObject = GameObject.FindWithTag("EnemyBulletPool");
         if (poolObject != null)
         {

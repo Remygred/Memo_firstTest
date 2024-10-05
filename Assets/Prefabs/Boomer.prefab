@@ -33,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 8310772701838353811}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.1255965, y: 0.6763284, z: 0}
+  m_LocalPosition: {x: -0.879, y: 0.623, z: 0}
   m_LocalScale: {x: 1.1866155, y: 1.1866155, z: 1.1866155}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   speed: 0.5
-  explosionRadius: 3
+  explosionRadius: 2
   detonationDistance: 0.5
   Atk: 10
   Hp: 0

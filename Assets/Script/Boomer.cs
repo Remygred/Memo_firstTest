@@ -20,6 +20,8 @@ public class Boomer : MonoBehaviour
     public AudioSource AtkaudioSource;
     public AudioClip AtkSound;
 
+    private ObjectPool boomerPool;  // 引用对象池
+
     void Start()
     {
         // 自动查找场景中的玩家
@@ -38,6 +40,13 @@ public class Boomer : MonoBehaviour
 
         // 获取敌人的健康管理组件
         enemyHealth = GetComponent<EnemyHealth>();
+
+        // 查找对象池
+        GameObject poolObject = GameObject.FindGameObjectWithTag("BoomerPool");  // 通过标签查找对象池
+        if (poolObject != null)
+        {
+            boomerPool = poolObject.GetComponent<ObjectPool>();
+        }
     }
 
     void Update()
@@ -100,15 +109,22 @@ public class Boomer : MonoBehaviour
             AtkaudioSource.PlayOneShot(AtkSound);
         }
 
-        yield return new WaitForSeconds(1f);
+        // 等待爆炸动画的播放完成时间
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
 
         // 检测爆炸范围内的所有对象
         Collider2D[] objectsInRange = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
         foreach (Collider2D obj in objectsInRange)
         {
+            // 忽略自身
+            if (obj.gameObject == this.gameObject)
+            {
+                continue; 
+            }
+
             // 对玩家造成伤害
             if (obj.CompareTag("player") && !Character.IsGetAttack)
-            { 
+            {
                 Character.TakeDamage(Atk);
             }
 
@@ -118,12 +134,14 @@ public class Boomer : MonoBehaviour
                 EnemyHealth enemyHealth = obj.GetComponent<EnemyHealth>();
                 if (enemyHealth != null)
                 {
-                    enemyHealth.TakeDamage(Atk,true);  // 让敌人受到伤害
+                    enemyHealth.TakeDamage(Atk, true);  // 让敌人受到伤害
                 }
             }
         }
 
-        // 爆炸后销毁自爆怪
-        Destroy(gameObject);
+        // 在爆炸动画播放完之后才回收到对象池
+        yield return new WaitForSeconds(1f);  // 额外等待时间保证动画播放结束
+
+        boomerPool.ReturnObject(gameObject);  // 归还到对象池
     }
 }
