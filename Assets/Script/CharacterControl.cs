@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterControl : MonoBehaviour
 {
-    public float speed = 5f;
+    public float speed ;
     float Move_x;
     float Move_y;
     Animator ani;
@@ -14,6 +14,12 @@ public class CharacterControl : MonoBehaviour
 
     public AudioSource SkillaudioSource;
     public AudioClip SkillSound;
+
+    public AudioSource Walk;
+    public AudioClip WalkSound;
+
+    private float curtime = 0f;
+    private float settime = 0.3f;
 
     public void Start()
     {
@@ -34,6 +40,8 @@ public class CharacterControl : MonoBehaviour
             return;
         }
 
+        curtime += Time.deltaTime;
+
         MoveAnimation();
         Move();
 
@@ -46,6 +54,11 @@ public class CharacterControl : MonoBehaviour
 
     void MoveAnimation()
     {
+        if ((Move_x != 0f || Move_y != 0f) && curtime >= settime) 
+        { 
+            Walk.PlayOneShot(WalkSound);
+            curtime = 0f;
+        }
         ani.SetBool("isMovingR", Move_x > 0);
         ani.SetBool("isMovingL", Move_x < 0);
     }

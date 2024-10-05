@@ -62,14 +62,13 @@ public class TreeSpawner : MonoBehaviour
         return (Vector2)player.position + spawnPosition;
     }
 
-    // 协程逐步检查并重新定位树的位置，防止性能问题
     IEnumerator RelocateTreesCoroutine()
     {
         isRelocating = true;
 
         foreach (GameObject tree in spawnedTrees)
         {
-            if (tree == null) continue;  // 如果树对象被销毁，跳过
+            if (tree == null) continue;
 
             // 计算树与玩家之间的距离
             float distanceToPlayer = Vector2.Distance(tree.transform.position, player.position);
@@ -88,21 +87,10 @@ public class TreeSpawner : MonoBehaviour
                 tree.transform.position = newPosition;
             }
 
-            yield return null;  // 等待一帧，防止性能卡顿
+            yield return null;
         }
 
         isRelocating = false;
     }
 
-    // 画出生成区域的可视化（调试用）
-    private void OnDrawGizmosSelected()
-    {
-        if (player != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(player.position, spawnRadius);  // 画出生成范围
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(player.position, relocateDistance);  // 画出重新定位的范围
-        }
-    }
 }

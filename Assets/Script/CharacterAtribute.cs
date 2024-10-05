@@ -25,20 +25,24 @@ public class CharacterAtribute : MonoBehaviour
     public AudioSource audioSource;  // 用于播放音效的 AudioSource
     public AudioClip deathSound;     // 死亡音效
 
-    public AudioSource HealaudioSource;  
-    public AudioClip HealSound;
-
     public AudioSource ExpaudioSource;
     public AudioClip ExpSound;
 
     public AudioSource LevelaudioSource;
     public AudioClip LevelSound;
 
+    public UpgradeManager upgradeManager;  // 引用升级面板管理器
     private bool isDead = false;  // 用于防止重复调用 Die()
 
     public bool OK = true;
 
     public CountdownTimer count;
+
+    public GameObject lighting;
+
+    public CharacterControl Control;
+
+    public ExperienceOrb ExpOrb;
 
     public void Start()
     {
@@ -53,6 +57,8 @@ public class CharacterAtribute : MonoBehaviour
         // 初始化血量UI
         healthUIManager.InitializeHearts(MaxHp);  // 初始化时生成相应数量的心形图标
         healthUIManager.UpdateHearts(Hp);  // 更新初始的心形图标
+
+        lighting.SetActive(false);
     }
 
     public void GetExp(int _Exp)
@@ -62,42 +68,74 @@ public class CharacterAtribute : MonoBehaviour
         {
             ExpaudioSource.PlayOneShot(ExpSound);
         }
-        LevelUp();
-        // 更新经验条
+
+        StartCoroutine(LevelUp());  // 使用协程处理升级
         FindObjectOfType<ExperienceBar>().UpdateExperienceBar();
     }
 
-    void LevelUp()
+    IEnumerator LevelUp()
     {
         while (Exp >= MaxExp)
         {
+            Exp -= MaxExp;
+            level++;
+            MaxExp += 10; // 每升一级，下一次升级需要的经验值增加
+
+            // 触发闪电动画
+            lighting.SetActive(true);
+            yield return new WaitForSeconds(0.25f);
+            lighting.SetActive(false);
+
             if (LevelaudioSource != null && LevelSound != null)
             {
                 LevelaudioSource.PlayOneShot(LevelSound);
             }
-            Exp -= MaxExp;
-            level++;
-            oHp += 5;
-            Gun.magazineSize++;
-            if (Hp == MaxHp)
-            {
-                Hp += 1;
-                MaxHp += 1;  // 增加最大血量
-            } 
-            else 
-            {
-                Hp++;
-                if (HealaudioSource != null && HealSound != null)
-                {
-                    HealaudioSource.PlayOneShot(HealSound);
-                }
-            }
-            Atk += 1;
+
+            // 暂停游戏并弹出升级选项面板
+            upgradeManager.ShowUpgradePanel();
 
             // 更新血量上限和当前血量的 UI
             healthUIManager.InitializeHearts(MaxHp);  // 重新生成UI心形图标
             healthUIManager.UpdateHearts(Hp);  // 更新图标显示
         }
+    }
+
+    // 增加最大生命值
+    public void IncreaseMaxHp()
+    {
+        MaxHp += 5;
+        Hp = MaxHp;
+        healthUIManager.InitializeHearts(MaxHp);
+        healthUIManager.UpdateHearts(Hp);
+    }
+
+    // 增加攻击力
+    public void IncreaseAttack()
+    {
+        Atk += 2;
+    }
+
+    // 增加移动速度
+    public void IncreaseMoveSpeed()
+    {
+        Control.speed += 0.5f;
+    }
+
+    // 增加子弹容量
+    public void IncreaseBulletCapacity()
+    {
+        Gun.magazineSize += 5;
+    }
+
+    // 加快换弹速度
+    public void DecreaseReloadTime()
+    {
+        Gun.reloadTime = Mathf.Max(0.5f, Gun.reloadTime - 0.2f);  // 设置最小换弹时间
+    }
+
+    public void ExpandRange()
+    {
+        ExpOrb.absorbDistance += 0.2f;
     }
 
     public void TakeDamage(int damage)
@@ -130,7 +168,7 @@ public class CharacterAtribute : MonoBehaviour
 
         count.OK = false;
 
-        if(OK) StartCoroutine(WaitForPause());  
+        if (OK) StartCoroutine(WaitForPause());
     }
 
     IEnumerator WaitForPause()
@@ -141,7 +179,7 @@ public class CharacterAtribute : MonoBehaviour
             bgmManager.GetComponent<AudioSource>().volume = 0f;
         }
         Animator ani = Death.GetComponent<Animator>();
-        ani.SetBool("Die",true);
+        ani.SetBool("Die", true);
         // 播放死亡音效
         if (audioSource != null && deathSound != null)
         {

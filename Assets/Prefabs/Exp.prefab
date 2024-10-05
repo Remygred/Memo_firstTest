@@ -249,4 +249,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1.5
   absorbDistance: 2
-  experienceValue: 1
+  experienceValue: 10

@@ -18,6 +18,7 @@ TagManager:
   - MeleePool
   - RangedPool
   - BoomerPool
+  - lighting
   layers:
   - Default
   - TransparentFX

@@ -5,8 +5,8 @@ using UnityEngine;
 public class ExperienceOrb : MonoBehaviour
 {
     public float moveSpeed = 5f;  // 经验球向玩家移动的速度
-    public float absorbDistance = 3f;  // 经验球开始被吸取的距离
-    public int experienceValue = 10;  // 经验球提供的经验值
+    public float absorbDistance ;  // 经验球开始被吸取的距离
+    public int experienceValue ;  // 经验球提供的经验值
 
     private Transform player;  // 玩家对象
     private CharacterAtribute Character;
