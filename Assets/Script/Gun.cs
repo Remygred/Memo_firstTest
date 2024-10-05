@@ -8,14 +8,14 @@ public class Gun : MonoBehaviour
     Vector3 offset;
     float Move_x;
 
-    public GameObject bulletPrefab;  // 子弹的预制体
+    public ObjectPool bulletPool;  // 引用对象池
     public float bulletSpeed;  // 子弹飞行速度
     public float bulletOffset;  // 子弹偏移距离
 
     public int magazineSize;  // 子弹容量
     public int currentAmmo;  // 当前子弹数
 
-    public float reloadTime ;  // 换弹CD时间
+    public float reloadTime;  // 换弹CD时间
     private bool isReloading = false;  // 是否正在换弹
 
     public AudioSource ReloadaudioSource;
@@ -35,7 +35,7 @@ public class Gun : MonoBehaviour
     {
         if (Time.timeScale == 0f)
         {
-            return; 
+            return;
         }
 
         ShotDirect();
@@ -59,7 +59,7 @@ public class Gun : MonoBehaviour
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePosition.z = 0f;
             Shoot(mousePosition);
-            currentAmmo--;  // 每次射击后减少一发子弹
+            currentAmmo -= 2;  // 每次射击后减少两发子弹
         }
 
         // 如果子弹用完，开始换弹
@@ -84,7 +84,6 @@ public class Gun : MonoBehaviour
 
     public void Shoot(Vector3 mousePosition)
     {
-
         if (ShotaudioSource != null && ShotSound != null)
         {
             ShotaudioSource.PlayOneShot(ShotSound);
@@ -95,18 +94,19 @@ public class Gun : MonoBehaviour
 
         Vector3 offset = Vector3.Cross(direction, Vector3.forward) * bulletOffset;
 
+        // 使用对象池生成子弹
         Vector3 leftBulletPosition = transform.position + offset;
-        GameObject leftBullet = Instantiate(bulletPrefab, leftBulletPosition, Quaternion.identity);
-        Rigidbody2D leftRb = leftBullet.GetComponent<Rigidbody2D>();
-
+        GameObject leftBullet = bulletPool.GetObject();  // 从对象池获取子弹
+        leftBullet.transform.position = leftBulletPosition;
         leftBullet.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 180f);
+        Rigidbody2D leftRb = leftBullet.GetComponent<Rigidbody2D>();
         leftRb.velocity = direction * bulletSpeed;
 
         Vector3 rightBulletPosition = transform.position - offset;
-        GameObject rightBullet = Instantiate(bulletPrefab, rightBulletPosition, Quaternion.identity);
-        Rigidbody2D rightRb = rightBullet.GetComponent<Rigidbody2D>();
-
+        GameObject rightBullet = bulletPool.GetObject();  // 从对象池获取子弹
+        rightBullet.transform.position = rightBulletPosition;
         rightBullet.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 180f);
+        Rigidbody2D rightRb = rightBullet.GetComponent<Rigidbody2D>();
         rightRb.velocity = direction * bulletSpeed;
     }
 

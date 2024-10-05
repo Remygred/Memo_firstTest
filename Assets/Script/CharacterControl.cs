@@ -10,18 +10,25 @@ public class CharacterControl : MonoBehaviour
     Animator ani;
 
     public Gun gunScript;  // 关联枪的脚本
+    public ObjectPool bulletPool;  // 引用子弹的对象池
 
     public AudioSource SkillaudioSource;
     public AudioClip SkillSound;
 
     public void Start()
     {
-        ani = GetComponent<Animator>();     
+        ani = GetComponent<Animator>();
+
+        // 获取子弹对象池
+        GameObject poolObject = GameObject.FindWithTag("BulletPool");
+        if (poolObject != null)
+        {
+            bulletPool = poolObject.GetComponent<ObjectPool>();
+        }
     }
 
     public void Update()
     {
-
         if (Time.timeScale == 0f)
         {
             return;
@@ -29,6 +36,7 @@ public class CharacterControl : MonoBehaviour
 
         MoveAnimation();
         Move();
+
         // 监听鼠标右键的技能触发
         if (Input.GetMouseButtonDown(1) && gunScript.currentAmmo > 0)
         {
@@ -47,7 +55,7 @@ public class CharacterControl : MonoBehaviour
         Move_x = Input.GetAxis("Horizontal");
         Move_y = Input.GetAxis("Vertical");
 
-        Vector3 Move = new Vector3(Move_x,Move_y,0);
+        Vector3 Move = new Vector3(Move_x, Move_y, 0);
         transform.Translate(Move * speed * Time.deltaTime);
     }
 
@@ -57,8 +65,6 @@ public class CharacterControl : MonoBehaviour
         {
             SkillaudioSource.PlayOneShot(SkillSound);
         }
-        // 子弹的预制体
-        GameObject bulletPrefab = gunScript.bulletPrefab;  // 假设你已经在枪的脚本中有引用
 
         // 计算每颗子弹之间的角度
         float angleStep = 360f / gunScript.currentAmmo;  // 每颗子弹之间的角度均匀分布
@@ -72,19 +78,28 @@ public class CharacterControl : MonoBehaviour
             // 旋转角度来计算发射方向
             Vector3 direction = Quaternion.Euler(0, 0, angle) * Vector3.right;
 
-            // 在角色位置实例化子弹
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            // 从对象池中获取子弹，而不是实例化
+            GameObject bullet = bulletPool.GetObject();
 
-            // 计算子弹的旋转角度，使其-x方向对准发射方向
-            float bulletAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            bullet.transform.rotation = Quaternion.Euler(0, 0, bulletAngle + 180);  // +180度使-x方向对准发射方向
+            if (bullet != null)
+            {
+                // 设置子弹的位置和方向
+                bullet.transform.position = transform.position;
 
-            // 获取子弹的 Rigidbody2D 来控制子弹运动
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                // 计算子弹的旋转角度，使其-x方向对准发射方向
+                float bulletAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                bullet.transform.rotation = Quaternion.Euler(0, 0, bulletAngle + 180);
 
-            // 设定子弹的速度
-            float bulletSpeed = gunScript.bulletSpeed;  // 使用枪的子弹速度
-            rb.velocity = direction * bulletSpeed;
+                // 获取子弹的 Rigidbody2D 来控制子弹运动
+                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+
+                // 设定子弹的速度
+                float bulletSpeed = gunScript.bulletSpeed;  // 使用枪的子弹速度
+                rb.velocity = direction * bulletSpeed;
+
+                // 激活子弹
+                bullet.SetActive(true);
+            }
         }
 
         gunScript.currentAmmo = 0;
@@ -92,5 +107,4 @@ public class CharacterControl : MonoBehaviour
         // 将子弹数清空，进入换弹状态
         gunScript.StartCoroutine(gunScript.Reload());
     }
-
 }

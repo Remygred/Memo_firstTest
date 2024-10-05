@@ -11,6 +11,13 @@ TagManager:
   - Enemy
   - EnemyBullet
   - BGMManager
+  - BulletPool
+  - EnemyBulletPool
+  - REnemy
+  - ExpPool
+  - MeleePool
+  - RangedPool
+  - BoomerPool
   layers:
   - Default
   - TransparentFX

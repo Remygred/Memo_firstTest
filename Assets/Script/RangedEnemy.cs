@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class RangedEnemy : MonoBehaviour
 {
@@ -16,18 +15,20 @@ public class RangedEnemy : MonoBehaviour
     private Animator animator;  // 动画控制器
     private float nextFireTime = 0f;  // 下次发射子弹的时间
 
-    private CharacterAtribute Character;//
+    private CharacterAtribute Character;
     private EnemyHealth enemyHealth;
 
     public AudioSource AtkaudioSource;
     public AudioClip AtkSound;
+
+    private ObjectPool bulletPool;  // 对象池引用
 
     void Start()
     {
         // 如果没有手动设置玩家对象，自动查找
         if (player == null || Character == null)
         {
-            GameObject playerObj = GameObject.FindGameObjectWithTag("player");  // 请确保 Tag 为 "player"
+            GameObject playerObj = GameObject.FindGameObjectWithTag("player");
             if (playerObj != null)
             {
                 player = playerObj.transform;
@@ -38,8 +39,15 @@ public class RangedEnemy : MonoBehaviour
         // 获取敌人的动画组件
         animator = GetComponent<Animator>();
 
-        //获得健康组件
+        // 获得健康组件
         enemyHealth = GetComponent<EnemyHealth>();
+
+        // 查找对象池
+        GameObject poolObject = GameObject.FindGameObjectWithTag("EnemyBulletPool");  // 通过标签查找对象池
+        if (poolObject != null)
+        {
+            bulletPool = poolObject.GetComponent<ObjectPool>();
+        }
     }
 
     void Update()
@@ -104,18 +112,13 @@ public class RangedEnemy : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            
             // 如果碰到子弹，敌人受伤
             if (enemyHealth != null)
             {
-                enemyHealth.TakeDamage(Character.Atk,false);  // 调用敌人受伤函数并减少10点生命值
+                enemyHealth.TakeDamage(Character.Atk, false);  // 调用敌人受伤函数
             }
-
-            // 销毁子弹
-            Destroy(collision.gameObject);
         }
     }
 
@@ -126,18 +129,29 @@ public class RangedEnemy : MonoBehaviour
         {
             AtkaudioSource.PlayOneShot(AtkSound);
         }
+
+        // 如果没有对象池，则退出
+        if (bulletPool == null)
+        {
+            Debug.LogError("对象池未找到！");
+            return;
+        }
+
         // 计算子弹方向
         Vector3 direction = (player.position - transform.position).normalized;
 
-        // 生成子弹并设置位置和旋转
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        // 从对象池中获取子弹
+        GameObject bullet = bulletPool.GetObject();
 
-        // 获取子弹的 Rigidbody2D 并设置其速度
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.velocity = direction * bulletSpeed;
+        if (bullet != null)
+        {
+            // 设置子弹的位置和旋转
+            bullet.transform.position = transform.position;
+            bullet.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
 
-        // 根据方向旋转子弹
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        bullet.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            // 获取子弹的 Rigidbody2D 并设置其速度
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            rb.velocity = direction * bulletSpeed;
+        }
     }
 }

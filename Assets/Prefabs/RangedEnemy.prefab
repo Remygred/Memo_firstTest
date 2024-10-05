@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 7493651922004909342}
   m_Layer: 0
   m_Name: RangedEnemy
-  m_TagString: Enemy
+  m_TagString: REnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -146,6 +146,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Hp: 10
   spawner: {fileID: 0}
+  enemyPool: {fileID: 0}
+  PoolTag: RangedPool
 --- !u!70 &5701944372340217024
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -193,7 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 359854faa88c6d645b8de6b7dea74e49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  experienceOrbPrefab: {fileID: 7870610468127686746, guid: 6063cfb50893fd54dafea61fb2131f6f, type: 3}
+  orbPool: {fileID: 0}
   minExperienceOrbs: 1
   maxExperienceOrbs: 2
   spawnRadiusMin: 0.01

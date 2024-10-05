@@ -10,18 +10,26 @@ public class ExperienceOrb : MonoBehaviour
 
     private Transform player;  // 玩家对象
     private CharacterAtribute Character;
+    private ObjectPool orbPool;  // 对象池引用
 
     void Start()
     {
         // 查找带有"Player"标签的玩家
         if (player == null || Character == null)
         {
-            GameObject playerObj = GameObject.FindGameObjectWithTag("player"); 
+            GameObject playerObj = GameObject.FindGameObjectWithTag("player");
             if (playerObj != null)
             {
                 player = playerObj.transform;
                 Character = playerObj.GetComponent<CharacterAtribute>();
             }
+        }
+
+        // 查找对象池
+        GameObject poolObject = GameObject.FindGameObjectWithTag("ExpPool");
+        if (poolObject != null)
+        {
+            orbPool = poolObject.GetComponent<ObjectPool>();
         }
     }
 
@@ -43,7 +51,7 @@ public class ExperienceOrb : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // 如果经验球碰到玩家，增加玩家的经验值并销毁经验球
+        // 如果经验球碰到玩家，增加玩家的经验值并将经验球返回对象池
         if (other.CompareTag("player"))
         {
             CharacterAtribute playerAtribute = other.GetComponent<CharacterAtribute>();
@@ -52,7 +60,20 @@ public class ExperienceOrb : MonoBehaviour
                 Character.GetExp(experienceValue);
             }
 
-            Destroy(gameObject);  // 销毁经验球
+            ReturnToPool();  // 将经验球返回对象池
+        }
+    }
+
+    void ReturnToPool()
+    {
+        // 将经验球返回对象池而不是销毁
+        if (orbPool != null)
+        {
+            orbPool.ReturnObject(gameObject);
+        }
+        else
+        {
+            Debug.LogError("对象池未找到！");
         }
     }
 }

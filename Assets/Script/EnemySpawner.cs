@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab;  // 敌人预制体
+    public ObjectPool enemyPool;  // 对象池引用
     public float spawnRadiusMin;  // 敌人生成的最小距离
     public float spawnRadiusMax;  // 敌人生成的最大距离
     public float initialSpawnInterval;  // 初始生成间隔
@@ -19,7 +19,7 @@ public class EnemySpawner : MonoBehaviour
     private int currentEnemyCountMin;  // 当前每次生成的敌人最小数量
     private int currentEnemyCountMax;  // 当前每次生成的敌人最大数量
 
-    public int EnemyCountLimit; //单次最大敌人生成量
+    public int EnemyCountLimit; // 单次最大敌人生成量
 
     void Start()
     {
@@ -49,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
             currentSpawnInterval = Mathf.Max(minSpawnInterval, currentSpawnInterval - spawnAcceleration);
 
             // 随时间增加，敌人生成数量上限也逐渐增加
-            if(currentEnemyCountMax <= EnemyCountLimit)
+            if (currentEnemyCountMax <= EnemyCountLimit)
                 currentEnemyCountMax += maxEnemyCountIncreaseRate;
         }
     }
@@ -66,8 +66,9 @@ public class EnemySpawner : MonoBehaviour
             // 获取玩家周围的随机位置
             Vector3 spawnPosition = GetRandomPositionAroundPlayer();
 
-            // 在随机位置生成敌人
-            Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            GameObject enemy = enemyPool.GetObject();  // 从对象池获取敌人对象
+            enemy.transform.position = spawnPosition;  // 设置敌人的生成位置
+            enemy.SetActive(true);  // 激活敌人
         }
     }
 

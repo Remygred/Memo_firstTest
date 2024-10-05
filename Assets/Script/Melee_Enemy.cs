@@ -90,9 +90,6 @@ public class Melee_Enemy : MonoBehaviour
             {
                 enemyHealth.TakeDamage(Character.Atk,false);  // 调用敌人受伤函数并减少生命值
             }
-
-            // 销毁子弹
-            Destroy(collision.gameObject);
         }
     }
 

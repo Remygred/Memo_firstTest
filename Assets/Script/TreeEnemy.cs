@@ -84,16 +84,6 @@ public class TreeEnemy : MonoBehaviour
         }
     }
 
-    // 当子弹碰到树时，树挡住子弹
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Bullet") || other.CompareTag("EnemyBullet"))
-        {
-            // 子弹被挡住，销毁子弹
-            Destroy(other.gameObject);
-        }
-    }
-
     // 树睁眼
     void OpenEyes()
     {

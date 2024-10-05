@@ -86,9 +86,6 @@ public class Boomer : MonoBehaviour
             {
                 enemyHealth.TakeDamage(Character.Atk,false);  // 调用敌人受伤函数并减少生命值
             }
-
-            // 销毁子弹
-            Destroy(collision.gameObject);
        }
     }
 
@@ -116,7 +113,7 @@ public class Boomer : MonoBehaviour
             }
 
             // 对其他敌人造成伤害
-            if (obj.CompareTag("Enemy"))
+            if (obj.CompareTag("Enemy") || obj.CompareTag("REnemy"))
             {
                 EnemyHealth enemyHealth = obj.GetComponent<EnemyHealth>();
                 if (enemyHealth != null)
