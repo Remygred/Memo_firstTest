@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2555466168487104959}
   - component: {fileID: -788403888360990907}
   - component: {fileID: -1257083388959210664}
+  - component: {fileID: -9138331809149556921}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Enemy
@@ -57,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -118,7 +119,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4190944680281549903}
-  m_BodyType: 2
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -186,10 +187,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   eyeOpenDistance: 2.5
-  contactDamage: 10
+  contactDamage: 7
   Atk: 10
   AtkaudioSource: {fileID: -1257083388959210664}
   AtkSound: {fileID: 8300000, guid: 0ea92fce5ea9cbd4e9cdb3360c57c72f, type: 3}
+  EnemyControl: {fileID: -9138331809149556921}
 --- !u!82 &-1257083388959210664
 AudioSource:
   m_ObjectHideFlags: 0
@@ -286,3 +288,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-9138331809149556921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4190944680281549903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a30d7ca2d48e0d48bf9f38ca374a5f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFrozen: 0
+  rb: {fileID: 5034222486561581363}

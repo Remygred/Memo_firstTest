@@ -23,6 +23,8 @@ public class RangedEnemy : MonoBehaviour
 
     private ObjectPool bulletPool;  // 对象池引用
 
+    public EnemyControl enemyControl;
+
     void Start()
     {
         // 如果没有手动设置玩家对象，自动查找
@@ -52,6 +54,8 @@ public class RangedEnemy : MonoBehaviour
 
     void Update()
     {
+        if(enemyControl.isFrozen) return;
+
         // 计算敌人与玩家的距离
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 

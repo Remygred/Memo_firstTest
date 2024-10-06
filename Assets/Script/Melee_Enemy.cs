@@ -18,6 +18,8 @@ public class Melee_Enemy : MonoBehaviour
     public AudioSource AtkaudioSource;
     public AudioClip AtkSound;
 
+    public EnemyControl enemyControl;
+
     void Start()
     {
         if (player == null || Character == null)
@@ -39,6 +41,8 @@ public class Melee_Enemy : MonoBehaviour
 
     void Update()
     {
+        if (enemyControl.isFrozen) return;
+
         // 如果没有攻击，则持续移动到玩家位置
         if (!isAttacking)
         {
@@ -72,7 +76,7 @@ public class Melee_Enemy : MonoBehaviour
     // 检测敌人与玩家或者玩家子弹碰撞箱的触发事件
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("player") && !Character.IsGetAttack)
+        if (!enemyControl.isFrozen && collision.gameObject.CompareTag("player") && !Character.IsGetAttack)
         {
             // 当检测到玩家时停止移动并开始攻击
             if (AtkaudioSource != null && AtkSound != null)
@@ -95,6 +99,8 @@ public class Melee_Enemy : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (enemyControl.isFrozen) return;
+
         if (collision.gameObject.CompareTag("player") && !Character.IsGetAttack)
         {
             if (AtkaudioSource != null && AtkSound != null)
@@ -110,6 +116,8 @@ public class Melee_Enemy : MonoBehaviour
     // 当敌人离开玩家碰撞箱时恢复移动
     void OnTriggerExit2D(Collider2D collision)
     {
+        if (enemyControl.isFrozen) return;
+
         if (collision.gameObject.CompareTag("player"))
         {
             isAttacking = false;  // 恢复移动

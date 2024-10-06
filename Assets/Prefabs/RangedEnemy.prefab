@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 5701944372340217024}
   - component: {fileID: 5734279915066711888}
   - component: {fileID: 7493651922004909342}
+  - component: {fileID: -7678538936404620215}
+  - component: {fileID: 269875121640369684}
   m_Layer: 0
   m_Name: RangedEnemy
   m_TagString: REnemy
@@ -58,7 +60,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,6 +113,7 @@ MonoBehaviour:
   bulletSpeed: 2
   AtkaudioSource: {fileID: 7493651922004909342}
   AtkSound: {fileID: 8300000, guid: b7696f624bb4c144095ef4becee0a2b0, type: 3}
+  enemyControl: {fileID: -7678538936404620215}
 --- !u!95 &5732834819521962587
 Animator:
   serializedVersion: 5
@@ -144,10 +147,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9494ecb7ceb7d394a83a70535d382f2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: 10
+  Hp: 15
+  oHp: 15
   spawner: {fileID: 0}
   enemyPool: {fileID: 0}
   PoolTag: RangedPool
+  isDead: 0
 --- !u!70 &5701944372340217024
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -296,3 +301,44 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-7678538936404620215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4380755972647397384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a30d7ca2d48e0d48bf9f38ca374a5f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFrozen: 0
+  rb: {fileID: 269875121640369684}
+--- !u!50 &269875121640369684
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4380755972647397384}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

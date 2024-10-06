@@ -9,18 +9,18 @@ public class EnemySpawner : MonoBehaviour
     public float spawnRadiusMax;  // 敌人生成的最大距离
     public float initialSpawnInterval;  // 初始生成间隔
     public float minSpawnInterval;  // 最小生成间隔
-    public float spawnAcceleration;  // 每次生成后减少的时间，控制加速生成
 
-    public int initialEnemyCountMin = 1;  // 初始生成敌人的最小数量
-    public int initialEnemyCountMax = 3;  // 初始生成敌人的最大数量
-    public int maxEnemyCountIncreaseRate = 1;  // 每次生成后，敌人生成数量增加的速度
+    public int initialEnemyCountMin = 3;  // 初始生成敌人的最小数量
+    public int initialEnemyCountMax = 7;  // 初始生成敌人的最大数量
+    public int maxEnemyCountIncreaseRate = 5;  // 每次生成后，敌人生成数量增加的速度
 
     private float currentSpawnInterval;  // 当前的生成间隔时间
     private int currentEnemyCountMin;  // 当前每次生成的敌人最小数量
     private int currentEnemyCountMax;  // 当前每次生成的敌人最大数量
 
     public int EnemyCountLimit; // 单次最大敌人生成量
-
+    public float accelerationInterval = 60f;
+    private float accelerationTimer = 0f;
     void Start()
     {
         // 初始化当前生成间隔为初始生成间隔
@@ -45,12 +45,20 @@ public class EnemySpawner : MonoBehaviour
             // 等待当前间隔时间
             yield return new WaitForSeconds(currentSpawnInterval);
 
-            // 每次生成后加快生成速度，直到达到最短间隔
-            currentSpawnInterval = Mathf.Max(minSpawnInterval, currentSpawnInterval - spawnAcceleration);
+            // 每次生成后检查是否该加速
+            accelerationTimer += currentSpawnInterval;
+            if (accelerationTimer >= accelerationInterval)
+            {
+                // 加速生成速度
+                currentSpawnInterval = Mathf.Max(minSpawnInterval, currentSpawnInterval * 0.8f);
 
-            // 随时间增加，敌人生成数量上限也逐渐增加
-            if (currentEnemyCountMax <= EnemyCountLimit)
-                currentEnemyCountMax += maxEnemyCountIncreaseRate;
+                // 随时间增加，敌人生成数量上限也逐渐增加
+                if (currentEnemyCountMax <= EnemyCountLimit)
+                    currentEnemyCountMax += maxEnemyCountIncreaseRate;
+
+                // 重置加速计时器
+                accelerationTimer = 0f;
+            }
         }
     }
 

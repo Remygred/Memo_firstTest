@@ -15,6 +15,10 @@ public class TreeEnemy : MonoBehaviour
 
     public AudioSource AtkaudioSource;
     public AudioClip AtkSound;
+
+    public EnemyControl EnemyControl;
+
+    private Rigidbody2D rb;
     void Start()
     {
         // 如果没有手动设置玩家对象，自动查找
@@ -30,10 +34,16 @@ public class TreeEnemy : MonoBehaviour
 
         // 获取树的动画组件
         animator = GetComponent<Animator>();
+
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
+        if(EnemyControl.isFrozen) return;
+
+        rb.bodyType = RigidbodyType2D.Static;
+
         // 计算玩家与树的距离
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
@@ -52,6 +62,8 @@ public class TreeEnemy : MonoBehaviour
     // 当玩家碰到树时触发
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (EnemyControl.isFrozen) return;
+
         if (collision.gameObject.CompareTag("player") && !Character.IsGetAttack)
         {
             if (AtkaudioSource != null && AtkSound != null)
@@ -65,6 +77,8 @@ public class TreeEnemy : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (EnemyControl.isFrozen) return;
+
         if (collision.gameObject.CompareTag("player") && !Character.IsGetAttack)
         {
             if (AtkaudioSource != null && AtkSound != null)
@@ -78,6 +92,8 @@ public class TreeEnemy : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D collision)
     {
+        if (EnemyControl.isFrozen) return;
+
         if (collision.gameObject.CompareTag("player"))
         {
             animator.SetBool("Attack", false);

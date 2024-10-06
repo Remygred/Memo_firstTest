@@ -8,7 +8,7 @@ public class CharacterAtribute : MonoBehaviour
     public int Hp;
     public int MaxHp;  // 新增一个用于表示最大血量
     public int Exp;
-    public int Atk;
+    public float Atk;
     public int level;
     public int MaxExp;
     public int oHp;
@@ -51,7 +51,6 @@ public class CharacterAtribute : MonoBehaviour
         Atk = oAtk;
         Exp = 0;
         level = 0;
-        MaxExp = 10;
         ExpaudioSource.volume = 0.6f;
 
         // 初始化血量UI
@@ -79,7 +78,7 @@ public class CharacterAtribute : MonoBehaviour
         {
             Exp -= MaxExp;
             level++;
-            MaxExp += 10; // 每升一级，下一次升级需要的经验值增加
+            MaxExp *= 2; 
 
             // 触发闪电动画
             lighting.SetActive(true);
@@ -103,10 +102,15 @@ public class CharacterAtribute : MonoBehaviour
     // 增加最大生命值
     public void IncreaseMaxHp()
     {
-        MaxHp += 5;
-        Hp = MaxHp;
+        MaxHp += 2;
+        Hp += 2;
         healthUIManager.InitializeHearts(MaxHp);
         healthUIManager.UpdateHearts(Hp);
+    }
+
+    public void HealAllHP()
+    {
+        Hp = MaxExp;
     }
 
     // 增加攻击力
@@ -118,24 +122,24 @@ public class CharacterAtribute : MonoBehaviour
     // 增加移动速度
     public void IncreaseMoveSpeed()
     {
-        Control.speed += 0.5f;
+        Control.speed *= 1.2f;
     }
 
     // 增加子弹容量
     public void IncreaseBulletCapacity()
     {
-        Gun.magazineSize += 5;
+        Gun.magazineSize += 10;
     }
 
     // 加快换弹速度
     public void DecreaseReloadTime()
     {
-        Gun.reloadTime = Mathf.Max(0.5f, Gun.reloadTime - 0.2f);  // 设置最小换弹时间
+        Gun.reloadTime = Mathf.Max(0.5f, Gun.reloadTime * 0.9f);  // 设置最小换弹时间
     }
 
     public void ExpandRange()
     {
-        ExpOrb.absorbDistance += 0.2f;
+        ExpOrb.absorbDistance *= 1.2f;
     }
 
     public void TakeDamage(int damage)

@@ -12,13 +12,24 @@ public class UpgradeManager : MonoBehaviour
 
     public Sprite[] upgradeIcons;    // 对应升级选项的图标
     public CharacterAtribute character;  // 引用角色属性
+    public CharacterControl characterControl;
+    public GameObject fireball;  //火球预制体
 
     public AudioSource audioSource;  // 用于播放按钮点击音效的 AudioSource
     public AudioClip buttonClickSound;  // 按钮点击的音效文件
     public AudioClip up;
 
 
-    private string[] upgrades = { "Increase Max HP", "Increase Attack", "Increase Move Speed", "Increase Bullet Capacity", "Faster Reload", "Expand the picking range" };
+    private string[] upgrades = {
+        "Increase Max HP<br>(MaxHP + 2)", "Increase Attack<br>(Atk + 2)", "Increase Move Speed<br>(Speed + 20%)",
+        "Increase Bullet Capacity<br>(Capacity + 10)","Faster Reload<br>(ReloadTime - 10%)", "Expand the picking range<br>(Range + 10%)", 
+        "Heal All HP","Reduce Lightning Cooldown<br>(CD - 10%)", "Increase Lightning Damage<br>(Atk + 10%)",
+        "Increase Lightning Range<br>(Range + 10% ,Atk - 5%)","Reduce Fireball Cooldown<br>(CD - 10%)",
+        "Increase Fireball Explosion Damage<br>(Atk + 20%)", "Increase Fireball Explosion Radius<br>(Range + 20% ,Atk - 5%)",
+        "Reduce Ice Cooldown<br>(CD - 10%)", "Increase Ice Freeze Duration<br>(Duration + 10%)",
+        "Increase Ice Freeze Range<br>(Range + 40% ,Durantion - 10%)"
+    };
+
     private System.Action[] upgradeActions;  // 对应升级选项的操作
 
     void Start()
@@ -28,13 +39,24 @@ public class UpgradeManager : MonoBehaviour
         // 定义对应的升级操作
         upgradeActions = new System.Action[]
         {
-            () => { character.IncreaseMaxHp(); },  // 增加最大生命值
-            () => { character.IncreaseAttack(); },  // 增加攻击力
-            () => { character.IncreaseMoveSpeed(); },  // 增加移动速度
-            () => { character.IncreaseBulletCapacity(); },  // 增加子弹容量
-            () => { character.DecreaseReloadTime(); },  // 加快换弹速度
-            () => { character.ExpandRange(); }  // 扩大吸取范围
+            () => { character.IncreaseMaxHp(); },
+            () => { character.IncreaseAttack(); },
+            () => { character.IncreaseMoveSpeed(); },
+            () => { character.IncreaseBulletCapacity(); },
+            () => { character.DecreaseReloadTime(); },
+            () => { character.ExpandRange(); },
+            () => { character.HealAllHP(); },  // 恢复满血
+            () => { characterControl.ReduceLightningCooldown(); },  // 减少雷电法术CD
+            () => { characterControl.IncreaseLightningDamage(); },  // 提高雷电伤害
+            () => { characterControl.ExpandLightningRange(); },  // 扩大雷电范围
+            () => { characterControl.ReduceFireballCooldown(); },  // 减少火球法术CD
+            () => { fireball.GetComponent<FireballSkill>().IncreaseExplosionDamage(); },  // 提高火球伤害
+            () => { fireball.GetComponent<FireballSkill>().IncreaseExplosionRadius(); },  // 扩大火球爆炸范围
+            () => { characterControl.ReduceIceCooldown(); },  // 减少冰冻法术CD
+            () => { characterControl.ExtendFreezeDuration(); },  // 延长冰冻时间
+            () => { characterControl.ExpandFreezeRange(); }  // 扩大冰冻范围
         };
+
     }
 
     // 显示升级面板

@@ -57,7 +57,6 @@ public class TreeSpawner : MonoBehaviour
         float angle = Random.Range(0f, Mathf.PI * 2);  // 随机角度
         float radius = Random.Range(0f, spawnRadius) + Random.Range(-randomDisplacement, randomDisplacement);  // 随机半径
 
-        // 计算相对于玩家的位置，并增加随机位移
         Vector2 spawnPosition = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
         return (Vector2)player.position + spawnPosition;
     }

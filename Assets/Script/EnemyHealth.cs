@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    public int Hp;
+    public float Hp;
+    public float oHp;
     public ExperienceOrbSpawner spawner;  // 经验球生成器
     public ObjectPool enemyPool;  // 引用对象池
     public string PoolTag;
+    public bool isDead = false;
 
     private void Start()
     {
@@ -18,11 +20,17 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        Hp = oHp;
+        isDead = false;
+    }
+
     // 敌人受伤
-    public void TakeDamage(int damage, bool isBoom)
+    public void TakeDamage(float damage, bool isBoom)
     {
         Hp -= damage;
-        if (Hp <= 0)
+        if (Hp <= 0 && !isDead)
         {
             Die(isBoom);
         }
@@ -31,6 +39,7 @@ public class EnemyHealth : MonoBehaviour
     // 敌人死亡
     void Die(bool isBoom)
     {
+        isDead = true;
         // 调用经验球生成器
         spawner = GetComponent<ExperienceOrbSpawner>();
         if (spawner != null && !isBoom)
@@ -39,15 +48,9 @@ public class EnemyHealth : MonoBehaviour
             spawner.SpawnExperienceOrbs(transform.position);
         }
 
-        // 回收敌人到对象池，而不是销毁
         if (enemyPool != null)
         {
             enemyPool.ReturnObject(gameObject);  // 将敌人返回到对象池
-        }
-        else
-        {
-            Debug.LogError("No ObjectPool found!");
-            Destroy(gameObject);  // 如果找不到对象池，仍然销毁敌人
         }
     }
 

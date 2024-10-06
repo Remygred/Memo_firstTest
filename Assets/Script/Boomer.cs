@@ -22,6 +22,8 @@ public class Boomer : MonoBehaviour
 
     private ObjectPool boomerPool;  // 引用对象池
 
+    public EnemyControl enemyControl;
+
     void Start()
     {
         // 自动查找场景中的玩家
@@ -51,6 +53,8 @@ public class Boomer : MonoBehaviour
 
     void Update()
     {
+        if(enemyControl.isFrozen) return;
+
         // 如果已经爆炸，就不再移动
         if (isExploding) return;
 

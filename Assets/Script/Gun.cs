@@ -24,6 +24,8 @@ public class Gun : MonoBehaviour
     public AudioSource ShotaudioSource;
     public AudioClip ShotSound;
 
+    public CharacterControl CharacterControl;
+
     void Start()
     {
         offset = player.transform.position - transform.position;
@@ -54,7 +56,7 @@ public class Gun : MonoBehaviour
         }
 
         // 当按下鼠标左键并且还有子弹时，发射子弹
-        if (Input.GetMouseButtonDown(0) && currentAmmo > 0)
+        if (!CharacterControl.isPreparingFireball && Input.GetMouseButtonDown(0) && currentAmmo > 0)
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePosition.z = 0f;

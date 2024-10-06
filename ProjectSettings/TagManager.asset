@@ -19,6 +19,7 @@ TagManager:
   - RangedPool
   - BoomerPool
   - lighting
+  - LightingSkill
   layers:
   - Default
   - TransparentFX
