@@ -12,7 +12,7 @@ public class Boomer : MonoBehaviour
     public int Hp;
 
     private bool isExploding = false;  // 是否正在爆炸
-    private Animator animator;  // 动画控制器
+    public Animator animator;  // 动画控制器
 
     private CharacterAtribute Character;
     private EnemyHealth enemyHealth;  // 引用敌人的健康管理组件
@@ -36,9 +36,6 @@ public class Boomer : MonoBehaviour
                 Character = playerObj.GetComponent<CharacterAtribute>();
             }
         }
-
-        // 获取敌人的动画组件
-        animator = GetComponent<Animator>();
 
         // 获取敌人的健康管理组件
         enemyHealth = GetComponent<EnemyHealth>();
@@ -70,6 +67,11 @@ public class Boomer : MonoBehaviour
         {
             MoveTowardsPlayer();  // 继续向玩家靠近
         }
+    }
+
+    private void OnEnable()
+    {
+        animator.SetBool("Boom", false);
     }
 
     // 移动敌人向玩家靠近

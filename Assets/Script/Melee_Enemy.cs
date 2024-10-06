@@ -6,7 +6,7 @@ public class Melee_Enemy : MonoBehaviour
 {
     public Transform player;  // 玩家对象的Transform
     public float speed;  // 敌人移动速度
-    private Animator animator;  // 动画控制器
+    public Animator animator;  // 动画控制器
     public int Atk;  // 敌人攻击力
 
     private CharacterAtribute Character;
@@ -30,10 +30,7 @@ public class Melee_Enemy : MonoBehaviour
                 player = playerObj.transform;
                 Character = playerObj.GetComponent<CharacterAtribute>();
             }
-        }
-
-        // 获取敌人的动画组件
-        animator = GetComponent<Animator>();
+        };
 
         // 获取敌人的健康管理组件
         enemyHealth = GetComponent<EnemyHealth>();
@@ -48,6 +45,11 @@ public class Melee_Enemy : MonoBehaviour
         {
             MoveTowardsPlayer();
         }
+    }
+
+    private void OnEnable()
+    {
+        animator.SetBool("Attack", false);
     }
 
     // 使用 Transform 移动敌人靠近玩家

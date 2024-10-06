@@ -193,6 +193,7 @@ MonoBehaviour:
   detonationDistance: 0.5
   Atk: 15
   Hp: 0
+  animator: {fileID: 3524930619391054631}
   AtkaudioSource: {fileID: 5891740762199216051}
   AtkSound: {fileID: 8300000, guid: 136d42ee666952a4e88375aa2fa87def, type: 3}
   enemyControl: {fileID: 586259627928547837}

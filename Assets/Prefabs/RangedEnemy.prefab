@@ -111,6 +111,7 @@ MonoBehaviour:
   chaseDistance: 1
   fireRate: 1
   bulletSpeed: 2
+  animator: {fileID: 5732834819521962587}
   AtkaudioSource: {fileID: 7493651922004909342}
   AtkSound: {fileID: 8300000, guid: b7696f624bb4c144095ef4becee0a2b0, type: 3}
   enemyControl: {fileID: -7678538936404620215}

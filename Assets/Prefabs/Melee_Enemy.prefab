@@ -127,6 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   speed: 0.75
+  animator: {fileID: 7430938817066936039}
   Atk: 1
   AtkaudioSource: {fileID: 5536156276390420141}
   AtkSound: {fileID: 8300000, guid: b89701b6a178a944c9d394a78ed9ceae, type: 3}

@@ -12,7 +12,7 @@ public class RangedEnemy : MonoBehaviour
     public float fireRate;  // 子弹发射频率
     public float bulletSpeed;  // 子弹速度
 
-    private Animator animator;  // 动画控制器
+    public Animator animator;  // 动画控制器
     private float nextFireTime = 0f;  // 下次发射子弹的时间
 
     private CharacterAtribute Character;
@@ -37,9 +37,6 @@ public class RangedEnemy : MonoBehaviour
                 Character = playerObj.GetComponent<CharacterAtribute>();
             }
         }
-
-        // 获取敌人的动画组件
-        animator = GetComponent<Animator>();
 
         // 获得健康组件
         enemyHealth = GetComponent<EnemyHealth>();
@@ -75,6 +72,11 @@ public class RangedEnemy : MonoBehaviour
             MoveTowardsPlayer();
             animator.SetBool("Attack", false);  // 取消攻击动画
         }
+    }
+
+    private void OnEnable()
+    {
+        animator.SetBool("Attack", false);
     }
 
     // 使用 Transform 移动敌人靠近玩家
