@@ -111,6 +111,8 @@ public class CharacterAtribute : MonoBehaviour
     public void HealAllHP()
     {
         Hp = MaxExp;
+        healthUIManager.InitializeHearts(MaxHp);
+        healthUIManager.UpdateHearts(Hp);
     }
 
     // Ôö¼Ó¹¥»÷Á¦
