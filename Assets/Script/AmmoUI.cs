@@ -3,15 +3,15 @@ using TMPro;
 
 public class AmmoUI : MonoBehaviour
 {
-    public TMP_Text currentAmmoTMP;  // ÒıÓÃÏÔÊ¾µ±Ç°µ¯Ò©µÄ TMP Text
-    public TMP_Text maxAmmoTMP;      // ÒıÓÃÏÔÊ¾×î´óµ¯Ò©µÄ TMP Text
+    public TMP_Text currentAmmoTMP;  // å¼•ç”¨æ˜¾ç¤ºå½“å‰å¼¹è¯çš„ TMP Text
+    public TMP_Text maxAmmoTMP;      // å¼•ç”¨æ˜¾ç¤ºæœ€å¤§å¼¹è¯çš„ TMP Text
 
     public Gun gun;
 
-    // ÔÚÓÎÏ·¿ªÊ¼Ê±³õÊ¼»¯µ¯Ò© UI
+    // åœ¨æ¸¸æˆå¼€å§‹æ—¶åˆå§‹åŒ–å¼¹è¯ UI
     void Start()
     {
-        // ³õÊ¼»¯µ¯Ò© UI
+        // åˆå§‹åŒ–å¼¹è¯ UI
         UpdateAmmoUI();
     }
 
@@ -20,13 +20,10 @@ public class AmmoUI : MonoBehaviour
         UpdateAmmoUI();
     }
 
-    // ¿ÉÒÔÔÚÓÎÏ·ÖĞµ±×Óµ¯·¢Éú±ä»¯Ê±µ÷ÓÃÕâ¸öº¯Êı
     public void UpdateAmmoUI()
     {
-        // ¸üĞÂµ±Ç°µ¯Ò©ÊıµÄÏÔÊ¾£¬¸ñÊ½»¯ÎªÈıÎ»Êı
         currentAmmoTMP.text = gun.currentAmmo.ToString("D3");
 
-        // ¸üĞÂ×î´óµ¯Ò©ÊıµÄÏÔÊ¾£¬¸ñÊ½»¯ÎªÈıÎ»Êı
         maxAmmoTMP.text = gun.magazineSize.ToString("D3");
     }
 }
