@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class ExperienceOrb : MonoBehaviour
 {
-    public float moveSpeed = 5f;  // ¾­ÑéÇòÏòÍæ¼ÒÒÆ¶¯µÄËÙ¶È
-    public float absorbDistance ;  // ¾­ÑéÇò¿ªÊ¼±»ÎüÈ¡µÄ¾àÀë
-    public int experienceValue ;  // ¾­ÑéÇòÌá¹©µÄ¾­ÑéÖµ
+    public float moveSpeed = 5f;  // ç»éªŒçƒå‘ç©å®¶ç§»åŠ¨çš„é€Ÿåº¦
+    public float absorbDistance ;  // ç»éªŒçƒå¼€å§‹è¢«å¸å–çš„è·ç¦»
+    public int experienceValue ;  // ç»éªŒçƒæä¾›çš„ç»éªŒå€¼
 
-    private Transform player;  // Íæ¼Ò¶ÔÏó
+    private Transform player;  // ç©å®¶å¯¹è±¡
     private CharacterAtribute Character;
-    private ObjectPool orbPool;  // ¶ÔÏó³ØÒıÓÃ
+    private ObjectPool orbPool;  // å¯¹è±¡æ± å¼•ç”¨
 
     void Start()
     {
-        // ²éÕÒ´øÓĞ"Player"±êÇ©µÄÍæ¼Ò
         if (player == null || Character == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("player");
@@ -25,7 +24,7 @@ public class ExperienceOrb : MonoBehaviour
             }
         }
 
-        // ²éÕÒ¶ÔÏó³Ø
+        // æŸ¥æ‰¾å¯¹è±¡æ± 
         GameObject poolObject = GameObject.FindGameObjectWithTag("ExpPool");
         if (poolObject != null)
         {
@@ -37,10 +36,10 @@ public class ExperienceOrb : MonoBehaviour
     {
         if (player != null)
         {
-            // ¼ÆËã¾­ÑéÇòÓëÍæ¼ÒµÄ¾àÀë
+            // è®¡ç®—ç»éªŒçƒä¸ç©å®¶çš„è·ç¦»
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-            // Èç¹û¾àÀëĞ¡ÓÚÎüÈ¡·¶Î§£¬¾­ÑéÇòÏòÍæ¼ÒÒÆ¶¯
+            // å¦‚æœè·ç¦»å°äºå¸å–èŒƒå›´ï¼Œç»éªŒçƒå‘ç©å®¶ç§»åŠ¨
             if (distanceToPlayer <= absorbDistance)
             {
                 float step = moveSpeed * Time.deltaTime;
@@ -51,7 +50,7 @@ public class ExperienceOrb : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Èç¹û¾­ÑéÇòÅöµ½Íæ¼Ò£¬Ôö¼ÓÍæ¼ÒµÄ¾­ÑéÖµ²¢½«¾­ÑéÇò·µ»Ø¶ÔÏó³Ø
+        // å¦‚æœç»éªŒçƒç¢°åˆ°ç©å®¶ï¼Œå¢åŠ ç©å®¶çš„ç»éªŒå€¼å¹¶å°†ç»éªŒçƒè¿”å›å¯¹è±¡æ± 
         if (other.CompareTag("player"))
         {
             CharacterAtribute playerAtribute = other.GetComponent<CharacterAtribute>();
@@ -60,20 +59,19 @@ public class ExperienceOrb : MonoBehaviour
                 Character.GetExp(experienceValue);
             }
 
-            ReturnToPool();  // ½«¾­ÑéÇò·µ»Ø¶ÔÏó³Ø
+            ReturnToPool();  // å°†ç»éªŒçƒè¿”å›å¯¹è±¡æ± 
         }
     }
 
     void ReturnToPool()
     {
-        // ½«¾­ÑéÇò·µ»Ø¶ÔÏó³Ø¶ø²»ÊÇÏú»Ù
         if (orbPool != null)
         {
             orbPool.ReturnObject(gameObject);
         }
         else
         {
-            Debug.LogError("¶ÔÏó³ØÎ´ÕÒµ½£¡");
+            Debug.LogError("å¯¹è±¡æ± æœªæ‰¾åˆ°ï¼");
         }
     }
 }
