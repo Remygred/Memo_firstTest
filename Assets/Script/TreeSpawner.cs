@@ -4,58 +4,57 @@ using UnityEngine;
 
 public class TreeSpawner : MonoBehaviour
 {
-    public GameObject treePrefab;  // Ê÷µÄÔ¤ÖÆÌå
-    public int numberOfTrees;  // ÒªÉú³ÉµÄÊ÷µÄÊıÁ¿
-    public float spawnRadius;  // Íæ¼ÒÖÜÎ§Éú³ÉµÄ·¶Î§
-    public float relocateDistance;  // ³¬¹ıÕâ¸ö¾àÀëÊ±½«Ê÷ÒÆ¶¯
-    public float minDistanceFromPlayer = 1f;  // Ê÷Éú³ÉÊ±ÓëÍæ¼ÒµÄ×îĞ¡¾àÀë
-    public float randomDisplacement = 1.5f;  // Ôö¼ÓÒ»µã¶îÍâµÄËæ»úÆ«ÒÆÁ¿
+    public GameObject treePrefab;  // æ ‘çš„é¢„åˆ¶ä½“
+    public int numberOfTrees;  // è¦ç”Ÿæˆçš„æ ‘çš„æ•°é‡
+    public float spawnRadius;  // ç©å®¶å‘¨å›´ç”Ÿæˆçš„èŒƒå›´
+    public float relocateDistance;  // è¶…è¿‡è¿™ä¸ªè·ç¦»æ—¶å°†æ ‘ç§»åŠ¨
+    public float minDistanceFromPlayer = 1f;  // æ ‘ç”Ÿæˆæ—¶ä¸ç©å®¶çš„æœ€å°è·ç¦»
+    public float randomDisplacement = 1.5f;  // å¢åŠ ä¸€ç‚¹é¢å¤–çš„éšæœºåç§»é‡
 
-    private List<GameObject> spawnedTrees = new List<GameObject>();  // ±£´æËùÓĞÉú³ÉµÄÊ÷
-    private Transform player;  // Íæ¼Ò¶ÔÏó
-    private bool isRelocating = false;  // ±ê¼ÇÊÇ·ñÕıÔÚÖØĞÂ¶¨Î»
+    private List<GameObject> spawnedTrees = new List<GameObject>();  // ä¿å­˜æ‰€æœ‰ç”Ÿæˆçš„æ ‘
+    private Transform player;  // ç©å®¶å¯¹è±¡
+    private bool isRelocating = false;  // æ ‡è®°æ˜¯å¦æ­£åœ¨é‡æ–°å®šä½
 
     void Start()
     {
-        // ÕÒµ½Íæ¼ÒµÄ Transform
         player = transform.parent;
 
-        // ÔÚÓÎÏ·¿ªÊ¼Ê±Éú³ÉÊ÷
+        // åœ¨æ¸¸æˆå¼€å§‹æ—¶ç”Ÿæˆæ ‘
         SpawnInitialTrees();
     }
 
     void Update()
     {
-        // ¶¯Ì¬¼ì²âÊ÷µÄÎ»ÖÃ£¬³¬³ö·¶Î§Ê±ÖØĞÂ¶¨Î»
-        if (!isRelocating)  // ·ÀÖ¹¶à´Îµ÷ÓÃ
+        // åŠ¨æ€æ£€æµ‹æ ‘çš„ä½ç½®ï¼Œè¶…å‡ºèŒƒå›´æ—¶é‡æ–°å®šä½
+        if (!isRelocating)  // é˜²æ­¢å¤šæ¬¡è°ƒç”¨
         {
             StartCoroutine(RelocateTreesCoroutine());
         }
     }
 
-    // ÔÚÍæ¼ÒÖÜÎ§Éú³É³õÊ¼µÄÊ÷
+    // åœ¨ç©å®¶å‘¨å›´ç”Ÿæˆåˆå§‹çš„æ ‘
     void SpawnInitialTrees()
     {
         for (int i = 0; i < numberOfTrees; i++)
         {
             Vector2 spawnPosition = GetRandomPositionAroundPlayer();
 
-            // È·±£Éú³ÉµÄÊ÷²»ÔÚÍæ¼Ò¸½½ü
+            // ç¡®ä¿ç”Ÿæˆçš„æ ‘ä¸åœ¨ç©å®¶é™„è¿‘
             while (Vector2.Distance(spawnPosition, player.position) < minDistanceFromPlayer)
             {
-                spawnPosition = GetRandomPositionAroundPlayer();  // Èç¹û¾àÀëÌ«½ü£¬ÖØĞÂÉú³ÉÎ»ÖÃ
+                spawnPosition = GetRandomPositionAroundPlayer();  // å¦‚æœè·ç¦»å¤ªè¿‘ï¼Œé‡æ–°ç”Ÿæˆä½ç½®
             }
 
             GameObject tree = Instantiate(treePrefab, spawnPosition, Quaternion.identity);
-            spawnedTrees.Add(tree);  // ±£´æÉú³ÉµÄÊ÷
+            spawnedTrees.Add(tree);  // ä¿å­˜ç”Ÿæˆçš„æ ‘
         }
     }
 
-    // »ñÈ¡Íæ¼ÒÖÜÎ§µÄËæ»úÉú³ÉÎ»ÖÃ£¬²¢Ôö¼ÓËæ»úÆ«ÒÆÁ¿
+    // è·å–ç©å®¶å‘¨å›´çš„éšæœºç”Ÿæˆä½ç½®ï¼Œå¹¶å¢åŠ éšæœºåç§»é‡
     Vector2 GetRandomPositionAroundPlayer()
     {
-        float angle = Random.Range(0f, Mathf.PI * 2);  // Ëæ»ú½Ç¶È
-        float radius = Random.Range(0f, spawnRadius) + Random.Range(-randomDisplacement, randomDisplacement);  // Ëæ»ú°ë¾¶
+        float angle = Random.Range(0f, Mathf.PI * 2);  // éšæœºè§’åº¦
+        float radius = Random.Range(0f, spawnRadius) + Random.Range(-randomDisplacement, randomDisplacement);  // éšæœºåŠå¾„
 
         Vector2 spawnPosition = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
         return (Vector2)player.position + spawnPosition;
@@ -69,15 +68,14 @@ public class TreeSpawner : MonoBehaviour
         {
             if (tree == null) continue;
 
-            // ¼ÆËãÊ÷ÓëÍæ¼ÒÖ®¼äµÄ¾àÀë
+            // è®¡ç®—æ ‘ä¸ç©å®¶ä¹‹é—´çš„è·ç¦»
             float distanceToPlayer = Vector2.Distance(tree.transform.position, player.position);
 
-            // Èç¹û¾àÀë³¬¹ı relocateDistance£¬½«Ê÷ÒÆ¶¯µ½Íæ¼ÒÖÜÎ§µÄËæ»úÎ»ÖÃ
             if (distanceToPlayer > relocateDistance)
             {
                 Vector2 newPosition = GetRandomPositionAroundPlayer();
 
-                // È·±£ÖØĞÂ¶¨Î»µÄÊ÷²»ÔÚÍæ¼Ò¸½½ü
+                // ç¡®ä¿é‡æ–°å®šä½çš„æ ‘ä¸åœ¨ç©å®¶é™„è¿‘
                 while (Vector2.Distance(newPosition, player.position) < minDistanceFromPlayer)
                 {
                     newPosition = GetRandomPositionAroundPlayer();
