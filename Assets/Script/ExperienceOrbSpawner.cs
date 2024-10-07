@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class ExperienceOrbSpawner : MonoBehaviour
 {
-    public ObjectPool orbPool;  // ¶ÔÏó³ØÒıÓÃ
-    public int minExperienceOrbs;  // ×îĞ¡Éú³ÉÊıÁ¿
-    public int maxExperienceOrbs;  // ×î´óÉú³ÉÊıÁ¿
-    public float spawnRadiusMin;  // ×îĞ¡Éú³É°ë¾¶
-    public float spawnRadiusMax;  // ×î´óÉú³É°ë¾¶
+    public ObjectPool orbPool;  // å¯¹è±¡æ± å¼•ç”¨
+    public int minExperienceOrbs;  // æœ€å°ç”Ÿæˆæ•°é‡
+    public int maxExperienceOrbs;  // æœ€å¤§ç”Ÿæˆæ•°é‡
+    public float spawnRadiusMin;  // æœ€å°ç”ŸæˆåŠå¾„
+    public float spawnRadiusMax;  // æœ€å¤§ç”ŸæˆåŠå¾„
 
-    // Éú³É¾­ÑéÇòµÄº¯Êı
+    // ç”Ÿæˆç»éªŒçƒçš„å‡½æ•°
     public void SpawnExperienceOrbs(Vector3 playerPosition)
     {
 
@@ -20,34 +20,33 @@ public class ExperienceOrbSpawner : MonoBehaviour
         {
             orbPool = poolObject.GetComponent<ObjectPool>();
         }
-        // Ëæ»úÉú³É¾­ÑéÇòµÄÊıÁ¿
+        // éšæœºç”Ÿæˆç»éªŒçƒçš„æ•°é‡
         int experienceOrbsCount = Random.Range(minExperienceOrbs, maxExperienceOrbs);
 
-        // Ñ­»·Éú³ÉÃ¿Ò»¸ö¾­ÑéÇò
+        // å¾ªç¯ç”Ÿæˆæ¯ä¸€ä¸ªç»éªŒçƒ
         for (int i = 0; i < experienceOrbsCount; i++)
         {
-            // Ëæ»úÉú³ÉÒ»¸öÔÚ×îĞ¡ºÍ×î´ó°ë¾¶·¶Î§ÄÚµÄÎ»ÖÃ
+            // éšæœºç”Ÿæˆä¸€ä¸ªåœ¨æœ€å°å’Œæœ€å¤§åŠå¾„èŒƒå›´å†…çš„ä½ç½®
             Vector3 spawnPosition = GetRandomPositionAroundPlayer(playerPosition);
 
-            // ´Ó¶ÔÏó³Ø»ñÈ¡¾­ÑéÇò¶ø²»ÊÇÖ±½Ó Instantiate
-            GameObject orb = orbPool.GetObject(); // ´Ó¶ÔÏó³Ø»ñÈ¡¶ÔÏó
-            orb.transform.position = spawnPosition; // ÉèÖÃÉú³ÉÎ»ÖÃ
-            orb.SetActive(true); // ¼¤»î¾­ÑéÇò
+            GameObject orb = orbPool.GetObject();
+            orb.transform.position = spawnPosition; // è®¾ç½®ç”Ÿæˆä½ç½®
+            orb.SetActive(true); // æ¿€æ´»ç»éªŒçƒ
         }
     }
 
     Vector3 GetRandomPositionAroundPlayer(Vector3 playerPosition)
     {
-        // Ëæ»úÉú³É½Ç¶È
+        // éšæœºç”Ÿæˆè§’åº¦
         float angle = Random.Range(0f, Mathf.PI * 2);
 
-        // Ëæ»úÉú³É°ë¾¶
+        // éšæœºç”ŸæˆåŠå¾„
         float radius = Random.Range(spawnRadiusMin, spawnRadiusMax);
 
-        // Ê¹ÓÃÈı½Çº¯Êı¼ÆËãËæ»úÉú³ÉµÄÎ»ÖÃ
+        // ä½¿ç”¨ä¸‰è§’å‡½æ•°è®¡ç®—éšæœºç”Ÿæˆçš„ä½ç½®
         Vector3 spawnPosition = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * radius;
 
-        // ·µ»ØÍæ¼ÒÖÜÎ§µÄÉú³ÉÎ»ÖÃ
+        // è¿”å›ç©å®¶å‘¨å›´çš„ç”Ÿæˆä½ç½®
         return playerPosition + spawnPosition;
     }
 }
